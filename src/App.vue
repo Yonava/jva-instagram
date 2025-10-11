@@ -18,19 +18,23 @@ const go = (data: SculptureData | undefined) => {
 
 <template>
   <div v-if="!selectedSculpture">
-    <div class="flex flex-col justify-center items-center gap-12 p-4">
-      <div v-for="sculpture in data" :key="sculpture.id">
+    <div class="flex flex-col justify-center items-center gap-4 p-4">
+      <div
+        v-for="sculpture in data"
+        :key="sculpture.id"
+        class="rounded-2xl overflow-hidden transition duration-700"
+      >
         <img
           @click="go(sculpture)"
           :src="sculpture.src"
-          class="w-12 h-12 object-contain"
+          class="object-cover aspect-square"
           :style="{ viewTransitionName: sculpture.id }"
         />
       </div>
     </div>
   </div>
 
-  <SculptureOverlay v-else :sculpture="selectedSculpture" />
+  <SculptureOverlay v-else :sculpture="selectedSculpture" @back-out="() => go(undefined)" />
 </template>
 
 <style>

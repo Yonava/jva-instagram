@@ -9,9 +9,15 @@ import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
 import { ref } from 'vue'
 import type { Swiper as SwiperEvent } from 'swiper/types'
 import type { SculptureData } from './data'
+// @ts-expect-error vue imports
+import ArrowBack from 'vue-material-design-icons/ChevronLeft.vue'
 
 const props = defineProps<{
   sculpture: SculptureData
+}>()
+
+const emits = defineEmits<{
+  (e: 'back-out'): void
 }>()
 
 const modules = [Navigation, Pagination, Scrollbar, A11y]
@@ -37,8 +43,14 @@ const isVideo = (src: string) => VIDEO_MIME_TYPES.some((mimeType) => src.endsWit
 </script>
 
 <template>
-  <div class="absolute w-full h-full bg-gray-800 flex flex-col items-center">
+  <div
+    class="absolute w-full h-full flex flex-col items-center"
+    :style="{ viewTransitionName: sculpture.id }"
+  >
     <div class="h-full w-full">
+      <button @click="emits('back-out')" class="absolute top-0 left-0 p-4 z-10">
+        <ArrowBack class="text-white"></ArrowBack>
+      </button>
       <swiper
         @slide-change="slideChanging"
         :modules="modules"
@@ -46,10 +58,9 @@ const isVideo = (src: string) => VIDEO_MIME_TYPES.some((mimeType) => src.endsWit
         :pagination="{ clickable: true }"
         :zoom="true"
         ref="swiperRef"
-        :style="{ viewTransitionName: sculpture.id }"
       >
         <swiper-slide v-for="src in sculpture.media" :key="src">
-          <div class="w-full h-[600px] bg-gray-900">
+          <div class="w-full h-screen">
             <video
               v-if="isVideo(src)"
               :src="src"
