@@ -8,18 +8,11 @@ import 'swiper/css/scrollbar'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
 import { ref } from 'vue'
 import type { Swiper as SwiperEvent } from 'swiper/types'
+import type { SculptureData } from './data'
 
 const props = defineProps<{
-  color: string
+  sculpture: SculptureData
 }>()
-
-const sources = [
-  'https://julianvossandreae.com/wp-content/gallery/currentinventory/438_Contrapposto.jpg',
-  'https://julianvossandreae.com/wp-content/gallery/jvaportfolio/02_2002_LargeFirAlphaHelix_c.jpg',
-  'https://julianvossandreae.com/wp-content/gallery/currentinventory/158_Quantum_Nefertiti_5.jpg',
-  '/chess.mov',
-  'https://julianvossandreae.com/wp-content/gallery/jvaportfolio/379_Superwoman2.jpg',
-]
 
 const modules = [Navigation, Pagination, Scrollbar, A11y]
 
@@ -32,7 +25,8 @@ const slideChanging = (ev: SwiperEvent) => {
     video.currentTime = 0
   })
   const activeVideo = videoRefs.value.find(
-    (ref) => ref.src.split('/').at(-1) === sources[ev.activeIndex]?.slice(1),
+    // @ts-expect-error wrong lib in config
+    (ref) => ref.src.split('/').at(-1) === props.sculpture.media[ev.activeIndex]?.slice(1),
   )
   if (!activeVideo) return
   activeVideo.play()
@@ -52,8 +46,9 @@ const isVideo = (src: string) => VIDEO_MIME_TYPES.some((mimeType) => src.endsWit
         :pagination="{ clickable: true }"
         :zoom="true"
         ref="swiperRef"
+        :style="{ viewTransitionName: sculpture.id }"
       >
-        <swiper-slide v-for="src in sources" :key="src">
+        <swiper-slide v-for="src in sculpture.media" :key="src">
           <div class="w-full h-[600px] bg-gray-900">
             <video
               v-if="isVideo(src)"
