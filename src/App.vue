@@ -29,7 +29,7 @@ const go = (color: string | undefined) => {
     </div>
   </div>
 
-  <SculptureOverlay v-else @click="go(undefined)" :color="selectedColor" />
+  <SculptureOverlay v-else :color="selectedColor" />
 </template>
 
 <style>
