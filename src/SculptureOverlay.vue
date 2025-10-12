@@ -40,6 +40,12 @@ const slideChanging = (ev: SwiperEvent) => {
 
 const VIDEO_MIME_TYPES = ['mov', 'mp4']
 const isVideo = (src: string) => VIDEO_MIME_TYPES.some((mimeType) => src.endsWith(mimeType))
+
+const handleTouchEnd = (swiper: SwiperEvent) => {
+  const atFirstSlide = swiper.activeIndex === 0
+  const swipeRight = swiper.touches.diff > 50
+  if (atFirstSlide && swipeRight) emits('back-out')
+}
 </script>
 
 <template>
@@ -53,6 +59,7 @@ const isVideo = (src: string) => VIDEO_MIME_TYPES.some((mimeType) => src.endsWit
       </button>
       <swiper
         @slide-change="slideChanging"
+        @touch-end="handleTouchEnd"
         :modules="modules"
         :slides-per-view="1"
         :pagination="{ clickable: true }"
