@@ -49,10 +49,7 @@ const handleTouchEnd = (swiper: SwiperEvent) => {
 </script>
 
 <template>
-  <div
-    class="absolute w-full h-full flex flex-col items-center"
-    :style="{ viewTransitionName: viewTransitionName(sculpture) }"
-  >
+  <div class="absolute w-full h-full flex flex-col items-center">
     <div class="h-full w-full">
       <button @click="emits('back-out')" class="absolute top-0 left-0 p-4 z-10">
         <ArrowBack class="text-white"></ArrowBack>

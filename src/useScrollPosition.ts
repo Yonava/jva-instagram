@@ -1,14 +1,16 @@
+import type { UseVirtualListReturn } from '@vueuse/core'
+import type { Sculpture } from './useSculptureData'
+
 const SCROLL_KEY = 'list-scroll'
 
-export const useScrollPosition = () => {
-  const saveScrollPosition = () => {
-    const currentScroll = document.scrollingElement?.scrollTop ?? 0
-    sessionStorage.setItem(SCROLL_KEY, String(currentScroll))
+export const useScrollPosition = (scrollTo: UseVirtualListReturn<Sculpture>['scrollTo']) => {
+  const saveScrollPosition = (index: number) => {
+    sessionStorage.setItem(SCROLL_KEY, String(index))
   }
 
   const restoreScrollPosition = () => {
     const saved = +(sessionStorage.getItem(SCROLL_KEY) || 0)
-    requestAnimationFrame(() => window.scrollTo(0, saved))
+    requestAnimationFrame(() => scrollTo(saved))
   }
 
   return { saveScrollPosition, restoreScrollPosition }

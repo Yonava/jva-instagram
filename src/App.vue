@@ -7,15 +7,6 @@ import { viewTransitionName } from './utils'
 import { useVirtualList } from '@vueuse/core'
 
 const selectedSculpture = ref<Sculpture>()
-const { saveScrollPosition, restoreScrollPosition } = useScrollPosition()
-
-const go = (data: Sculpture | undefined) => {
-  document.startViewTransition(() => {
-    selectedSculpture.value = data
-    const scrollFn = data ? saveScrollPosition : restoreScrollPosition
-    scrollFn()
-  })
-}
 
 const { sculptures } = useSculptureData('CURRENT_INVENTORY')
 
@@ -23,10 +14,21 @@ const {
   list: sculptureList,
   containerProps,
   wrapperProps,
+  scrollTo,
 } = useVirtualList(sculptures, {
   itemHeight: 382,
   overscan: 2,
 })
+
+const { saveScrollPosition, restoreScrollPosition } = useScrollPosition(scrollTo)
+
+const go = (data: Sculpture | undefined) => {
+  document.startViewTransition(() => {
+    selectedSculpture.value = data
+    if (data) saveScrollPosition(+data.id)
+    else restoreScrollPosition()
+  })
+}
 </script>
 
 <template>
@@ -41,7 +43,6 @@ const {
           <img
             @click="go(sculpture)"
             :src="sculpture.thumbnail"
-            :style="{ viewTransitionName: viewTransitionName(sculpture) }"
             class="object-cover w-full aspect-square"
           />
           <!-- <div class="absolute bottom-0 bg-white/65 font-bold w-full py-6 px-4 text-2xl">
