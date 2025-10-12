@@ -60,7 +60,7 @@ const handleTouchEnd = (swiper: SwiperEvent) => {
         :modules="modules"
         :slides-per-view="1"
         :pagination="{ clickable: true }"
-        zoom
+        :zoom="true"
         virtual
         ref="swiperRef"
       >
