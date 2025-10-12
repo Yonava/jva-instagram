@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import SculptureOverlay from './SculptureOverlay.vue'
 import { useScrollPosition } from './useScrollPosition'
 import { data, type SculptureData } from './data'
+import { useSculptureData } from './useSculptureData'
 
 const selectedSculpture = ref<SculptureData>()
 const { saveScrollPosition, restoreScrollPosition } = useScrollPosition()
@@ -14,6 +15,9 @@ const go = (data: SculptureData | undefined) => {
     scrollFn()
   })
 }
+
+const sculptures = useSculptureData('CURRENT_INVENTORY')
+sculptures.then((d) => console.log(d))
 </script>
 
 <template>
@@ -27,8 +31,8 @@ const go = (data: SculptureData | undefined) => {
         <img
           @click="go(sculpture)"
           :src="sculpture.src"
-          class="object-cover aspect-square"
           :style="{ viewTransitionName: sculpture.id }"
+          class="object-cover aspect-square"
         />
       </div>
     </div>
