@@ -59,13 +59,14 @@ const handleTouchEnd = (swiper: SwiperEvent) => {
         @touch-end="handleTouchEnd"
         :modules="modules"
         :slides-per-view="1"
+        :on-zoom-change="(s, scale) => (s.allowTouchMove = scale <= 1)"
         :pagination="{ clickable: true }"
         :zoom="true"
         virtual
         ref="swiperRef"
       >
         <swiper-slide v-for="src in sculpture.media" :key="src">
-          <div class="w-full h-screen swiper-zoom-container">
+          <div :class="['w-full h-screen', !isVideo(src) && 'swiper-zoom-container']">
             <video
               v-if="isVideo(src)"
               :src="src"
