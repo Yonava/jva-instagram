@@ -57,7 +57,10 @@ const go = (data: Sculpture | undefined) => {
 </template>
 
 <style>
+html,
 body {
   background-color: var(--color-gray-700);
+  touch-action: none;
+  overscroll-behavior: none;
 }
 </style>
