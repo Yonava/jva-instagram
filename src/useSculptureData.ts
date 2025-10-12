@@ -85,7 +85,7 @@ export const useSculptureData = (sheet: keyof typeof SHEETS) => {
 
     // slice to remove header row
     const sculptureData = data.slice(1).map(SHEETS[sheet].mapper)
-    sculptures.value = sculptureData.slice(35)
+    sculptures.value = sculptureData
 
     return sculptureData
   }
