@@ -2,13 +2,13 @@
 import { ref } from 'vue'
 import SculptureOverlay from './SculptureOverlay.vue'
 import { useScrollPosition } from './useScrollPosition'
-import { data, type SculptureData } from './data'
-import { useSculptureData } from './useSculptureData'
+import { useSculptureData, type Sculpture } from './useSculptureData'
+import { viewTransitionName } from './utils'
 
-const selectedSculpture = ref<SculptureData>()
+const selectedSculpture = ref<Sculpture>()
 const { saveScrollPosition, restoreScrollPosition } = useScrollPosition()
 
-const go = (data: SculptureData | undefined) => {
+const go = (data: Sculpture | undefined) => {
   document.startViewTransition(() => {
     selectedSculpture.value = data
     const scrollFn = data ? saveScrollPosition : restoreScrollPosition
@@ -16,24 +16,26 @@ const go = (data: SculptureData | undefined) => {
   })
 }
 
-const sculptures = useSculptureData('CURRENT_INVENTORY')
-sculptures.then((d) => console.log(d))
+const { sculptures } = useSculptureData('CURRENT_INVENTORY')
 </script>
 
 <template>
   <div v-if="!selectedSculpture">
     <div class="flex flex-col justify-center items-center gap-4 p-4">
       <div
-        v-for="sculpture in data"
+        v-for="sculpture in sculptures"
         :key="sculpture.id"
-        class="rounded-2xl overflow-hidden transition duration-700"
+        class="relative rounded-md overflow-hidden transition duration-700 w-full"
       >
         <img
           @click="go(sculpture)"
-          :src="sculpture.src"
-          :style="{ viewTransitionName: sculpture.id }"
-          class="object-cover aspect-square"
+          :src="sculpture.thumbnail"
+          :style="{ viewTransitionName: viewTransitionName(sculpture) }"
+          class="object-cover w-full aspect-square"
         />
+        <div class="absolute bottom-0 bg-white/65 font-bold w-full py-6 px-4 text-2xl">
+          {{ sculpture.title }}
+        </div>
       </div>
     </div>
   </div>

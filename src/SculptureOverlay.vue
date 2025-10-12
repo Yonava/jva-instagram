@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from 'swiper/vue'
-// Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -8,12 +7,13 @@ import 'swiper/css/scrollbar'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
 import { ref } from 'vue'
 import type { Swiper as SwiperEvent } from 'swiper/types'
-import type { SculptureData } from './data'
 // @ts-expect-error vue imports
 import ArrowBack from 'vue-material-design-icons/ChevronLeft.vue'
+import type { Sculpture } from './useSculptureData'
+import { viewTransitionName } from './utils'
 
 const props = defineProps<{
-  sculpture: SculptureData
+  sculpture: Sculpture
 }>()
 
 const emits = defineEmits<{
@@ -51,7 +51,7 @@ const handleTouchEnd = (swiper: SwiperEvent) => {
 <template>
   <div
     class="absolute w-full h-full flex flex-col items-center"
-    :style="{ viewTransitionName: sculpture.id }"
+    :style="{ viewTransitionName: viewTransitionName(sculpture) }"
   >
     <div class="h-full w-full">
       <button @click="emits('back-out')" class="absolute top-0 left-0 p-4 z-10">

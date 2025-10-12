@@ -1,3 +1,5 @@
+import { readonly, ref } from 'vue'
+
 const KEY = 'AIzaSyDJtifzdi9ZJI1zsyZYCeTHXEXJlgHnLl8'
 const BASE_URI = 'https://sheets.googleapis.com/v4/spreadsheets'
 const SHEET_NAME = 'Sheet1'
@@ -9,7 +11,7 @@ type Link = {
   url: string
 }
 
-export type Sculpture = {
+export type Sculpture = Partial<{
   inventoryNumber: string
   title: string
   /** fabrication year of the sculpture */
@@ -23,19 +25,23 @@ export type Sculpture = {
   /** the preview image displayed on the menu */
   thumbnail: string
   /** a list of urls that link to images and videos */
-  media: string[]
+  media: readonly string[]
   /** where the sculpture is installed */
   location: string
   /** a summary of the sculpture / availability */
   explanation: string
   /** a link to more information / resources */
   link: Partial<Link>
+}> & {
+  /** for in-application processing only */
+  id: number
 }
 
 const SHEETS = {
   CURRENT_INVENTORY: {
     ID: '1Ebv0L8YH1cJbdH_h00tdZtNtHfTGM8-e7ci351J09DE',
-    mapper: (sheetRow: string[]): Partial<Sculpture> => ({
+    mapper: (sheetRow: string[], index: number): Sculpture => ({
+      id: index,
       inventoryNumber: sheetRow[0],
       title: sheetRow[1],
       year: sheetRow[2],
@@ -45,12 +51,13 @@ const SHEETS = {
       weight: sheetRow[6],
       retailPrice: sheetRow[7],
       thumbnail: sheetRow[8],
-      media: sheetRow[9]?.split(','),
+      media: [sheetRow[8] ?? '', ...(sheetRow[9]?.split(',') ?? [])],
     }),
   },
   PORTFOLIO: {
     ID: '1hJn2ufeFvEtAD-jXAmZJRdswR-Nj0Exy3MWtmQicFaY',
-    mapper: (sheetRow: string[]): Partial<Sculpture> => ({
+    mapper: (sheetRow: string[], index: number): Sculpture => ({
+      id: index,
       title: sheetRow[0],
       year: sheetRow[1],
       medium: sheetRow[2],
@@ -63,21 +70,29 @@ const SHEETS = {
         url: sheetRow[8],
       },
       thumbnail: sheetRow[9],
-      media: sheetRow[10]?.split(','),
+      media: [sheetRow[9] ?? '', ...(sheetRow[10]?.split(',') ?? [])],
     }),
   },
 } as const
 
 export const useSculptureData = (sheet: keyof typeof SHEETS) => {
+  const sculptures = ref<Sculpture[]>([])
   const dataUrl = `${BASE_URI}/${SHEETS[sheet].ID}/values/${SHEET_NAME}?key=${KEY}`
 
-  const fetchData = async () => {
+  const refreshSculptureData = async () => {
     const response = await fetch(dataUrl)
     const data = (await response.json()).values as string[][]
-    console.log('data', data)
+
     // slice to remove header row
-    return data.slice(1).map(SHEETS[sheet].mapper)
+    const sculptureData = data.slice(1).map(SHEETS[sheet].mapper)
+    sculptures.value = sculptureData
+
+    return sculptureData
   }
 
-  return fetchData()
+  refreshSculptureData()
+
+  return {
+    sculptures: readonly(sculptures),
+  }
 }
