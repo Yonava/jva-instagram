@@ -4,7 +4,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
+import { Navigation, Pagination, Scrollbar, A11y, Virtual } from 'swiper/modules'
 import { ref } from 'vue'
 import type { Swiper as SwiperEvent } from 'swiper/types'
 // @ts-expect-error vue imports
@@ -20,7 +20,7 @@ const emits = defineEmits<{
   (e: 'back-out'): void
 }>()
 
-const modules = [Navigation, Pagination, Scrollbar, A11y]
+const modules = [Navigation, Pagination, Scrollbar, A11y, Virtual]
 
 const videoRefs = ref<HTMLVideoElement[]>([])
 
@@ -63,7 +63,8 @@ const handleTouchEnd = (swiper: SwiperEvent) => {
         :modules="modules"
         :slides-per-view="1"
         :pagination="{ clickable: true }"
-        :zoom="true"
+        zoom
+        virtual
         ref="swiperRef"
       >
         <swiper-slide v-for="src in sculpture.media" :key="src">
