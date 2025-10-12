@@ -65,7 +65,7 @@ const handleTouchEnd = (swiper: SwiperEvent) => {
         ref="swiperRef"
       >
         <swiper-slide v-for="src in sculpture.media" :key="src">
-          <div class="w-full h-screen">
+          <div class="w-full h-screen swiper-zoom-container">
             <video
               v-if="isVideo(src)"
               :src="src"
