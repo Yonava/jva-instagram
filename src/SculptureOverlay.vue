@@ -43,27 +43,65 @@ const isVideo = (src: string) => VIDEO_MIME_TYPES.some((mimeType) => src.endsWit
 
 const handleTouchEnd = (swiper: SwiperEvent) => {
   const atFirstSlide = swiper.activeIndex === 0
-  const swipeRight = swiper.touches.diff > 50
+  const swipeRight = swiper.touches.diff > 200
   if (atFirstSlide && swipeRight) emits('back-out')
 }
+
+const infoActive = ref(false)
+const nonActiveClasses = 'bg-white w-32 h-12'
+const activeClasses = 'bg-white/60 backdrop-blur-lg w-68 h-48'
 </script>
 
 <template>
   <div class="absolute w-full h-full flex flex-col items-center">
     <div class="h-full w-full" :style="{ viewTransitionName: viewTransitionName(sculpture) }">
-      <button @click="emits('back-out')" class="absolute top-0 left-0 p-4 z-10">
-        <ArrowBack class="text-white"></ArrowBack>
-      </button>
+      <div class="absolute top-0 p-6 flex justify-between items-start w-full z-10">
+        <button @click="emits('back-out')">
+          <ArrowBack size="48" class="text-white"></ArrowBack>
+        </button>
+        <button
+          @click="infoActive = !infoActive"
+          :class="[
+            'px-4 py-2 font-bold transition-all duration-300 rounded-xl',
+            infoActive ? activeClasses : nonActiveClasses,
+          ]"
+        >
+          <span>Learn More</span>
+          <div>
+            <h1 class="text-xl">
+              {{ sculpture.title }}
+            </h1>
+            <div class="font-normal flex flex-col gap-1">
+              <div>
+                {{ sculpture.year }}
+              </div>
+              <div>
+                {{ sculpture.weight }}
+              </div>
+              <div>
+                {{ sculpture.dimensions }}
+              </div>
+              <div>
+                {{ sculpture.medium }}
+              </div>
+              <div>
+                {{ sculpture.location }}
+              </div>
+              <div>
+                {{ sculpture.explanation }}
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
       <swiper
         @slide-change="slideChanging"
         @touch-end="handleTouchEnd"
         :modules="modules"
         :slides-per-view="1"
-        :on-zoom-change="(s, scale) => (s.allowTouchMove = scale <= 1)"
         :pagination="{ clickable: true }"
         :zoom="true"
         virtual
-        ref="swiperRef"
       >
         <swiper-slide v-for="src in sculpture.media" :key="src">
           <div :class="['w-full h-screen', !isVideo(src) && 'swiper-zoom-container']">
