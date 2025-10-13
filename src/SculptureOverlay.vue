@@ -43,7 +43,7 @@ const isVideo = (src: string) => VIDEO_MIME_TYPES.some((mimeType) => src.endsWit
 
 const handleTouchEnd = (swiper: SwiperEvent) => {
   const atFirstSlide = swiper.activeIndex === 0
-  const swipeRight = swiper.touches.diff > 200
+  const swipeRight = swiper.touches.diff > 150
   if (atFirstSlide && swipeRight) emits('back-out')
 }
 
@@ -66,8 +66,8 @@ const activeClasses = 'bg-white/60 backdrop-blur-lg w-68 h-48'
             infoActive ? activeClasses : nonActiveClasses,
           ]"
         >
-          <span>Learn More</span>
-          <div>
+          <span v-if="!infoActive">Learn More</span>
+          <div v-else>
             <h1 class="text-xl">
               {{ sculpture.title }}
             </h1>
