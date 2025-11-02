@@ -1,20 +1,53 @@
 <script setup lang="ts">
 import type { Sculpture } from '@/useSculptureData';
 import { ref } from 'vue';
+import SculptureTitleValue from './SculptureTitleValue.vue';
+
+const collapsed = 'w-32 h-12'
+const nonCollapsed = 'w-68 h-96'
 
 const infoActive = ref(false)
-const nonActiveClasses = 'bg-white w-32 h-12'
-const activeClasses = 'bg-white/60 backdrop-blur-lg w-68 h-48'
-defineProps<{ sculpture: Sculpture }>()
+const nonActiveClasses = `bg-white ${collapsed}`
+const activeClasses = `bg-white/75 backdrop-blur-lg ${nonCollapsed}`
+const props = defineProps<{ sculpture: Sculpture }>()
+
+const data = [
+  {
+    title: 'Weighs',
+    value: props.sculpture.weight
+  },
+  {
+    title: 'Dimensions',
+    value: props.sculpture.dimensions,
+  },
+  {
+    title: 'Medium',
+    value: props.sculpture.medium
+  },
+  {
+    title: 'Location',
+    value: props.sculpture.location,
+  },
+  {
+    title: 'Explanation',
+    value: props.sculpture.explanation,
+  }
+]
 </script>
 
 <template>
   <button @click="infoActive = !infoActive" :class="[
-    'px-4 py-2 font-bold transition-all duration-300 rounded-xl',
+    'px-4 py-2 font-bold transition-all duration-300 rounded-xl relative overflow-hidden',
     infoActive ? activeClasses : nonActiveClasses,
   ]">
-    <span v-if="!infoActive">Learn More</span>
-    <div v-else>
+    <span :class="[
+      'transition-opacity duration-200',
+      infoActive ? 'opacity-0' : ''
+    ]">Learn More</span>
+    <div :class="[
+      `absolute ${nonCollapsed} text-right right-0 top-0 transition-opacity duration-200 px-4 py-2`,
+      infoActive ? '' : 'opacity-0',
+    ]">
       <h1 class="text-xl">
         {{ sculpture.title }}
       </h1>
@@ -22,20 +55,8 @@ defineProps<{ sculpture: Sculpture }>()
         <div>
           {{ sculpture.year }}
         </div>
-        <div>
-          {{ sculpture.weight }}
-        </div>
-        <div>
-          {{ sculpture.dimensions }}
-        </div>
-        <div>
-          {{ sculpture.medium }}
-        </div>
-        <div>
-          {{ sculpture.location }}
-        </div>
-        <div>
-          {{ sculpture.explanation }}
+        <div v-for="point in data" :key="point.title">
+          <SculptureTitleValue v-if="point.value" :title="point.title" :value="point.value" />
         </div>
       </div>
     </div>

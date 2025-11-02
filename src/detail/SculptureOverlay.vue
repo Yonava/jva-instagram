@@ -20,7 +20,7 @@ const emits = defineEmits<{
     <div class="h-full w-full" :style="{ viewTransitionName: viewTransitionName(sculpture) }">
       <div class="absolute top-0 p-6 flex justify-between items-start w-full z-10">
         <button @click="emits('back-out')">
-          <ArrowBack size="48" class="text-white"></ArrowBack>
+          <ArrowBack :size="48" class="text-white"></ArrowBack>
         </button>
         <SculptureInfo :sculpture="sculpture" />
       </div>
