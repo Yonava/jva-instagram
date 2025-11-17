@@ -2,14 +2,21 @@
 import type { Sculpture } from '@/useSculptureData';
 import { ref } from 'vue';
 import SculptureTitleValue from './SculptureTitleValue.vue';
+import { onClickOutside } from '@vueuse/core'
 
 const collapsed = 'w-32 h-12'
-const nonCollapsed = 'w-68 h-96'
+const nonCollapsed = 'w-80 h-96'
 
 const infoActive = ref(false)
 const nonActiveClasses = `bg-white ${collapsed}`
 const activeClasses = `bg-white/75 backdrop-blur-lg ${nonCollapsed}`
 const props = defineProps<{ sculpture: Sculpture }>()
+
+const button = ref<HTMLButtonElement>()
+
+onClickOutside(button, () => {
+  infoActive.value = false;
+})
 
 const data = [
   {
@@ -36,7 +43,7 @@ const data = [
 </script>
 
 <template>
-  <button @click="infoActive = !infoActive" :class="[
+  <button ref="button" @click="infoActive = !infoActive" :class="[
     'px-4 py-2 font-bold transition-all duration-300 rounded-xl relative overflow-hidden',
     infoActive ? activeClasses : nonActiveClasses,
   ]">
@@ -45,7 +52,7 @@ const data = [
       infoActive ? 'opacity-0' : ''
     ]">Learn More</span>
     <div :class="[
-      `absolute ${nonCollapsed} text-right right-0 top-0 transition-opacity duration-200 px-4 py-2`,
+      `absolute ${nonCollapsed} right-0 top-0 transition-opacity duration-200 px-4 py-2`,
       infoActive ? '' : 'opacity-0',
     ]">
       <h1 class="text-xl">
