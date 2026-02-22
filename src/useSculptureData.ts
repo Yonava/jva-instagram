@@ -11,6 +11,9 @@ type Link = {
   url: string
 }
 
+type USD = `$${string}`
+type Euro = `€${string}`
+
 export type Sculpture = Partial<{
   inventoryNumber: string
   title: string
@@ -21,7 +24,8 @@ export type Sculpture = Partial<{
   dimensions: string
   weight: string
   /** the price of the sculpture */
-  retailPrice: string
+  retailPriceUsd: USD
+  retailPriceEuro: Euro
   /** the preview image displayed on the menu */
   thumbnail: string
   /** a list of urls that link to images and videos */
@@ -49,9 +53,10 @@ const SHEETS = {
       medium: sheetRow[4],
       dimensions: sheetRow[5],
       weight: sheetRow[6],
-      retailPrice: sheetRow[7],
+      retailPriceUsd: sheetRow[7] as USD,
       thumbnail: sheetRow[8],
       media: [sheetRow[8] ?? '', ...(sheetRow[9]?.split(',') ?? [])],
+      retailPriceEuro: sheetRow[10] as Euro,
     }),
   },
   PORTFOLIO: {
