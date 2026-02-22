@@ -39,7 +39,7 @@ const go = (data: Sculpture | undefined) => {
           class="relative rounded-md overflow-hidden w-full">
           <img @click="go(sculpture)" :src="sculpture.thumbnail"
             :style="{ viewTransitionName: viewTransitionName(sculpture) }" class="object-cover w-full aspect-square" />
-          <div class="absolute bottom-0 bg-white/65 font-bold w-full py-6 px-4 text-2xl">
+          <div class="absolute bottom-0 pointer-events-none bg-white/85 w-full py-2 px-4 text-lg">
             {{ sculpture.title }}
           </div>
         </div>

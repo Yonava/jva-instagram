@@ -94,10 +94,13 @@ const toggleCurrencyType = () => {
           playsinline loop />
         <div v-else-if="src === INFO_SLIDE" class="p-4 w-full h-full grid place-items-center">
           <div class="w-full h-2/3 bg-gray-200 rounded-md p-4">
-            <i class="font-bold text-2xl">{{ sculpture.title }}</i>
+            <h1 class="font-bold text-2xl">{{ sculpture.title }}</h1>
             <div class="font-normal flex flex-col gap-1">
               <div>
                 {{ sculpture.year }}
+              </div>
+              <div>
+                {{ sculpture.edition }}
               </div>
               <div class="mt-1">
                 <div v-for="point in data" :key="point.title">
