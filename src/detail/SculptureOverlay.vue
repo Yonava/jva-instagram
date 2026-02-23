@@ -4,7 +4,6 @@ import ArrowBack from 'vue-material-design-icons/ChevronLeft.vue'
 import type { Sculpture } from '../useSculptureData'
 import { viewTransitionName } from '../utils'
 import SculptureSwiper from './SculptureSwiper.vue'
-import SculptureInfo from './SculptureInfo.vue'
 
 defineProps<{
   sculpture: Sculpture
@@ -23,9 +22,6 @@ const emits = defineEmits<{
           <ArrowBack :size="48" class="text-white"></ArrowBack>
         </button>
       </div>
-      <!-- <div class="footer-container p-6 pb-10 right-0 z-10">
-        <SculptureInfo :sculpture="sculpture" />
-      </div> -->
       <SculptureSwiper @back-out="emits('back-out')" :sculpture="sculpture" />
     </div>
   </div>
