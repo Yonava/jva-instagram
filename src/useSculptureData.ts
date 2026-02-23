@@ -55,7 +55,7 @@ const SHEETS = {
       weight: sheetRow[6],
       retailPriceUsd: sheetRow[7] as USD,
       thumbnail: sheetRow[8],
-      media: [sheetRow[8] ?? '', ...(sheetRow[9]?.split(',') ?? [])],
+      media: [sheetRow[8] ?? '', ...(sheetRow[9]?.split(',') ?? [])].filter(Boolean),
       retailPriceEuro: sheetRow[10] as Euro,
     }),
   },
@@ -75,7 +75,7 @@ const SHEETS = {
         url: sheetRow[8],
       },
       thumbnail: sheetRow[9],
-      media: [sheetRow[9] ?? '', ...(sheetRow[10]?.split(',') ?? [])],
+      media: [sheetRow[9] ?? '', ...(sheetRow[10]?.split(',') ?? [])].filter(Boolean),
     }),
   },
 } as const
