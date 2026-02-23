@@ -8,7 +8,7 @@ import { useVirtualList } from '@vueuse/core'
 
 const selectedSculpture = ref<Sculpture>()
 
-const { sculptures } = useSculptureData('PORTFOLIO')
+const { sculptures } = useSculptureData('CURRENT_INVENTORY')
 
 const {
   list: sculptureList,
