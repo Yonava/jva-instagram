@@ -26,7 +26,7 @@ const inquiryUrl = `mailto:${inquiryEmail}${inquirySubjectLine ? `?subject=${inq
           <button @click="emits('back-out')">
             <ArrowBack :size="48" class="text-white"></ArrowBack>
           </button>
-          <a :href="inquiryUrl" class="bg-gray-800 text-xl text-gray-100 px-8 py-2 rounded-full">
+          <a :href="inquiryUrl" class="bg-gray-200 text-xl text-gray-800 px-8 py-2 rounded-full">
             Inquire
           </a>
         </div>
